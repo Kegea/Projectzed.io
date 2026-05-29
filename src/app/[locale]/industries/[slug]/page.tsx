@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getIndustry, industries } from '@/lib/industries';
+import { getIndustry } from '@/lib/industries';
 import Link from 'next/link';
 
 type Props = {
