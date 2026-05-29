@@ -7,11 +7,7 @@ type Props = {
   params: Promise<{ locale: string; slug: string }>;
 };
 
-export async function generateStaticParams() {
-  return industries.map((industry) => ({
-    slug: industry.slug,
-  }));
-}
+
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
