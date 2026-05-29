@@ -1,0 +1,43 @@
+{
+  "name": "projectzed-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf .next",
+    "prebuild": "rm -rf .next",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.5.0",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.2",
+    "@tailwindcss/postcss": "^4.3.0",
+    "caniuse-lite": "^1.0.30001600",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.15.0",
+    "lucide-react": "^1.16.0",
+    "next": "14.2.35",
+    "next-intl": "^4.12.0",
+    "openai": "^6.39.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "resend": "^6.12.3",
+    "shadcn": "^4.8.0",
+    "tailwind-merge": "^3.6.0",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
+    "postcss": "^8",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^5"
+  }
+}

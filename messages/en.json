@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "webDesign": "Website Design",
+    "aiAutomation": "AI Automation",
+    "ecommerce": "E-commerce Integration",
+    "work": "Work",
+    "process": "About",
+    "trust": "Trust",
+    "talkToUs": "Talk to us"
+  },
+  "footer": {
+    "copy": "© 2026 ProjectZed. Built for real businesses.",
+    "home": "Home",
+    "services": "Services",
+    "work": "Work",
+    "process": "About",
+    "trust": "Trust",
+    "contact": "Contact",
+    "privacy": "Privacy Policy"
+  },
+  "whatsapp": {
+    "bubble": "Got a question? We reply fast 👋",
+    "ariaLabel": "Chat on WhatsApp"
+  }
+}

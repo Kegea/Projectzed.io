@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --color-green-deep: #013220;
+  --color-green-mid: #024a30;
+  --color-green-soft: #0a6640;
+  --color-olive: #4A5D23;
+  --color-olive-light: #6b8c3e;
+  --color-brass: #C8A951;
+  --color-brass-light: #e8c96a;
+  --color-parchment: #F5F0E8;
+  --color-parchment-2: #EDE7D9;
+  --color-forge: #111612;
+  --color-ink: #1C2B1F;
+  --color-muted: #5a6b5e;
+
+  /* --font-display and --font-body are injected at runtime by next/font/google in layout.tsx */
+}
+
+:root {
+  --green-deep:   #013220;
+  --green-mid:    #024a30;
+  --green-soft:   #0a6640;
+  --olive:        #4A5D23;
+  --olive-light:  #6b8c3e;
+  --brass:        #C8A951;
+  --brass-light:  #e8c96a;
+  --parchment:    #F5F0E8;
+  --parchment-2:  #EDE7D9;
+  --forge:        #111612;
+  --ink:          #1C2B1F;
+  --muted:        #5a6b5e;
+  --border:       rgba(1,50,32,0.12);
+  --border-light: rgba(255,255,255,0.1);
+  --white:        #ffffff;
+  /* --font-display and --font-body come from next/font — do not redefine here */
+  --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--parchment);
+  color: var(--ink);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Defaults — font only; colour is set per-component */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+p {
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 5%;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(1,50,32,0.96);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--green-deep);
+  padding: 4rem 5% 2.5rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ── HOMEPAGE KEYFRAMES ── */
+@keyframes scrollPulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+@keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }

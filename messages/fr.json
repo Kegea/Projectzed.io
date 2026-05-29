@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "services": "Services",
+    "webDesign": "Design de Site Web",
+    "aiAutomation": "Automatisation IA",
+    "ecommerce": "Intégration E-commerce",
+    "work": "Projets",
+    "process": "À propos",
+    "trust": "Confiance",
+    "talkToUs": "Contactez-nous"
+  },
+  "footer": {
+    "copy": "© 2026 ProjectZed. Conçu pour de vraies entreprises.",
+    "home": "Accueil",
+    "services": "Services",
+    "work": "Projets",
+    "process": "À propos",
+    "trust": "Confiance",
+    "contact": "Contact",
+    "privacy": "Politique de confidentialité"
+  },
+  "whatsapp": {
+    "bubble": "Une question ? Nous répondons rapidement 👋",
+    "ariaLabel": "Discuter sur WhatsApp"
+  }
+}
