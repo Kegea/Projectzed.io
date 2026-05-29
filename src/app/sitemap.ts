@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { industries } from '@/lib/industries';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://projectzed.io';
-const locales = ['en', 'fr', 'ar'];
+const locales = ['en', 'fr', 'es', 'ar'];
 
 const routes = [
   '',

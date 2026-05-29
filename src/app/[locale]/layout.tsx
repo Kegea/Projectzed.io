@@ -32,11 +32,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
 
   title: {
-
     default: 'ProjectZed — Efficient Business, Less Burnout',
-
-    template: '%s | ProjectZed',
-
+    template: '%s',
   },
 
   description:
