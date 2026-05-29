@@ -13,7 +13,8 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://projectzed.io'}/sitemap.xml`,
-    host: process.env.NEXT_PUBLIC_SITE_URL || 'https://projectzed.io',
+    sitemap: 'https://projectzed.io/sitemap.xml',
+    host: 'https://projectzed.io',
   };
 }
+

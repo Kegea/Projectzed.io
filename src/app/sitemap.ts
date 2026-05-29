@@ -1,21 +1,31 @@
 import { MetadataRoute } from 'next';
-import { industries } from '@/lib/industries';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://projectzed.io';
-const locales = ['en', 'fr', 'es', 'ar'];
+const BASE_URL = 'https://projectzed.io';
+const locales = ['en', 'fr', 'es'];
 
 const routes = [
   '',
   '/services',
   '/services/web-design',
-  '/services/ecommerce',
   '/services/ai-automation',
+  '/services/ecommerce',
   '/about',
   '/work',
   '/trust',
   '/contact',
   '/industries',
   '/privacy-policy',
+];
+
+const industrySlugs = [
+  'welding-businesses',
+  'pharmacies',
+  'barbershops',
+  'clothing-stores',
+  'construction',
+  'real-estate',
+  'florists',
+  'car-wash',
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -30,11 +40,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: route === '' ? 1.0 : route === '/services' ? 0.9 : 0.8,
       });
     }
-
-    // Industry pages
-    for (const industry of industries) {
+    for (const slug of industrySlugs) {
       entries.push({
-        url: `${BASE_URL}/${locale}/industries/${industry.slug}`,
+        url: `${BASE_URL}/${locale}/industries/${slug}`,
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.85,
@@ -44,3 +52,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return entries;
 }
+
