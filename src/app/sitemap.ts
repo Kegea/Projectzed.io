@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 const BASE_URL = 'https://projectzed.io';
-const locales = ['en', 'fr', 'es'];
+const locales = ['en', 'fr', 'es', 'ar'];
 
 const routes = [
   '',
