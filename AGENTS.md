@@ -7,7 +7,7 @@
 - **next-intl** i18n: locales `en`, `fr`, `ar` (RTL), prefix `always`
 - **shadcn/ui** (Base UI variant) via `@base-ui/react`, not Radix
 - **Framer Motion** for animations
-- **Forms:** Formspree (`https://formspree.io/f/xkoygzwy`)
+- **Forms:** Handled via custom API route using Resend and Supabase, secured with Cloudflare Turnstile
 
 ## Commands
 
@@ -66,6 +66,6 @@ legacy-static/         → old static HTML (do not modify, reference only)
 
 - **Tailwind v4** uses `@import "tailwindcss"` — no `tailwind.config.ts` file, no `@tailwind` directives. Use `@theme` for tokens.
 - **No `.env` files** present. Only `.env*.local` is gitignored. If adding env vars, create `.env.local`.
-- **Contact form** submits to Formspree — no backend API route.
+- **Contact form** submits to a custom backend route `/api/contact`.
 - **Legacy HTML** in `legacy-static/` is read-only reference material.
 - No CI, no tests, no pre-commit hooks.

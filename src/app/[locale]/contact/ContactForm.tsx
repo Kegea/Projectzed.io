@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import FadeUp from '@/components/FadeUp';
 import { Icons } from '@/components/icons';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 const WA_NUMBER = '256784749832';
 
@@ -40,6 +41,7 @@ export default function ContactForm() {
     email: '',
     service: '',
   });
+  const [turnstileToken, setTurnstileToken] = useState('');
   const maxLength = 500;
 
   // Voice transcript state
@@ -54,7 +56,8 @@ export default function ContactForm() {
                       formData.business.trim().length > 0 && 
                       formData.email.trim().length > 0 && 
                       formData.service !== '' && 
-                      messageWordCount >= 5;
+                      messageWordCount >= 5 &&
+                      turnstileToken !== '';
 
   useEffect(() => {
     const supported = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
@@ -132,6 +135,7 @@ export default function ContactForm() {
       email: (form.elements.namedItem('email') as HTMLInputElement)?.value,
       service: (form.elements.namedItem('service') as HTMLSelectElement)?.value,
       message: (form.elements.namedItem('message') as HTMLTextAreaElement)?.value,
+      turnstileToken,
     };
 
     try {
@@ -459,6 +463,16 @@ export default function ContactForm() {
                     {error}
                   </p>
                 )}
+
+                {/* Cloudflare Turnstile CAPTCHA */}
+                <div className="mt-4 flex justify-center">
+                  <Turnstile 
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''} 
+                    onSuccess={(token) => setTurnstileToken(token)}
+                    onError={() => setError('CAPTCHA failed to load. Please try again.')}
+                    options={{ theme: 'light' }}
+                  />
+                </div>
 
                 <button type="submit" disabled={loading || !isFormValid}
                   className="w-full flex items-center justify-center gap-2 bg-[#013220] text-white font-semibold py-4 rounded-[7px] border-none cursor-pointer transition-all duration-200 hover:bg-[#1a1a18] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(1,50,32,0.2)] disabled:opacity-60 mt-6 tracking-[0.01em] text-[0.95rem]">

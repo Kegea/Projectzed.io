@@ -2,6 +2,16 @@ import { Resend } from 'resend';
 import { supabaseAdmin } from '@/lib/supabase';
 import OpenAI from 'openai';
 
+function escapeHtml(unsafe: string | null | undefined): string {
+  if (!unsafe) return '';
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
 console.log('Service key exists:', !!process.env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -13,10 +23,27 @@ const openai = process.env.OPENAI_API_KEY
 
 export async function POST(request: Request) {
   try {
-    const { name, business, email, service, message } = await request.json();
+    const { name, business, email, service, message, turnstileToken } = await request.json();
 
     if (!name || !email || !message) {
       return Response.json({ error: 'Name, email, and message are required.' }, { status: 400 });
+    }
+
+    if (!turnstileToken) {
+      return Response.json({ error: 'Please complete the CAPTCHA to prove you are human.' }, { status: 400 });
+    }
+
+    const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
+    if (turnstileSecret) {
+      const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${encodeURIComponent(turnstileSecret)}&response=${encodeURIComponent(turnstileToken)}`,
+      });
+      const verifyJson = await verifyRes.json();
+      if (!verifyJson.success) {
+        return Response.json({ error: 'CAPTCHA verification failed. Please try again.' }, { status: 400 });
+      }
     }
 
     // AI Validation
@@ -68,19 +95,24 @@ If it misses ANY of these questions, respond with a short, polite, direct senten
     };
     const friendlyService = service ? (serviceLabels[service] || service) : 'your project';
 
+    const safeName = escapeHtml(name);
+    const safeBusiness = escapeHtml(business);
+    const safeEmail = escapeHtml(email);
+    const safeMessage = escapeHtml(message);
+
     const { data, error } = await resend.emails.send({
       from: `ProjectZed Contact <${process.env.RESEND_FROM_EMAIL || 'hello@projectzed.io'}>`,
       to: process.env.RESEND_TO_EMAIL || 'hello@projectzed.io',
-      replyTo: email,
-      subject: `New inquiry from ${name}${business ? ` — ${business}` : ''}`,
+      replyTo: safeEmail,
+      subject: `New inquiry from ${safeName}${safeBusiness ? ` — ${safeBusiness}` : ''}`,
       html: `
         <h2>New Contact Form Submission</h2>
         <table style="border-collapse:collapse;width:100%;max-width:600px;">
-          <tr><td style="padding:8px;font-weight:600;color:#555;">Name</td><td style="padding:8px;">${name}</td></tr>
-          ${business ? `<tr><td style="padding:8px;font-weight:600;color:#555;">Business</td><td style="padding:8px;">${business}</td></tr>` : ''}
-          <tr><td style="padding:8px;font-weight:600;color:#555;">Email</td><td style="padding:8px;"><a href="mailto:${email}">${email}</a></td></tr>
+          <tr><td style="padding:8px;font-weight:600;color:#555;">Name</td><td style="padding:8px;">${safeName}</td></tr>
+          ${safeBusiness ? `<tr><td style="padding:8px;font-weight:600;color:#555;">Business</td><td style="padding:8px;">${safeBusiness}</td></tr>` : ''}
+          <tr><td style="padding:8px;font-weight:600;color:#555;">Email</td><td style="padding:8px;"><a href="mailto:${safeEmail}">${safeEmail}</a></td></tr>
           ${service ? `<tr><td style="padding:8px;font-weight:600;color:#555;">Service</td><td style="padding:8px;">${friendlyService}</td></tr>` : ''}
-          <tr><td style="padding:8px;font-weight:600;color:#555;">Message</td><td style="padding:8px;white-space:pre-wrap;">${message}</td></tr>
+          <tr><td style="padding:8px;font-weight:600;color:#555;">Message</td><td style="padding:8px;white-space:pre-wrap;">${safeMessage}</td></tr>
         </table>
       `,
     });
@@ -93,7 +125,7 @@ If it misses ANY of these questions, respond with a short, polite, direct senten
     await resend.emails.send({
       from: `ProjectZed <${process.env.RESEND_FROM_EMAIL || 'hello@projectzed.io'}>`,
       to: email,
-      subject: `Got it, ${name.split(' ')[0]} — we'll be in touch`,
+      subject: `Got it, ${safeName.split(' ')[0]} — we'll be in touch`,
       html: `
         <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f0ece2;font-family:Helvetica,Arial,sans-serif;">
           <tr><td align="center" style="padding:32px 16px;">
@@ -108,7 +140,7 @@ If it misses ANY of these questions, respond with a short, polite, direct senten
             <table cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;background:#ffffff;border-radius:8px;margin-top:24px;">
               <tr>
                 <td style="padding:32px;">
-                  <h2 style="margin:0 0 16px;font-size:20px;color:#1a1a18;letter-spacing:-0.3px;">We got your message, ${name.split(' ')[0]}.</h2>
+                  <h2 style="margin:0 0 16px;font-size:20px;color:#1a1a18;letter-spacing:-0.3px;">We got your message, ${safeName.split(' ')[0]}.</h2>
                   <p style="margin:0 0 16px;font-size:15px;color:#555550;line-height:1.7;font-weight:300;">Thanks for reaching out. We've received your enquiry about <strong style="color:#1a1a18;font-weight:500;">${friendlyService}</strong> and we'll get back to you within 24 hours.</p>
                   <p style="margin:0 0 24px;font-size:15px;color:#555550;line-height:1.7;font-weight:300;">No pitch, no pressure. Just an honest conversation about what your business needs.</p>
                   <table cellpadding="0" cellspacing="0" border="0" style="background:#f5f0e6;border-left:3px solid #4A5D23;border-radius:0 6px 6px 0;width:100%;">
